@@ -17,5 +17,11 @@ Features
 
 ### Screenshots
 
-Direct links to ASAS-SN, VSX, etc. for a subject.
+#### Direct links to ASAS-SN, VSX, etc. for a subject.
 ![image](https://user-images.githubusercontent.com/250644/95807073-1e80a900-0cbe-11eb-8333-0667c12c080e.png)
+
+---
+
+#### UI on mobile devices: the lightcurve and the classify boxes can be fit into the screen without scrolling
+![image](https://user-images.githubusercontent.com/250644/95807796-e11d1b00-0cbf-11eb-83f6-0a3cce763219.png)
+

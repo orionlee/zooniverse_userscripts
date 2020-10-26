@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.9.0
+// @version     1.10.0
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -106,8 +106,8 @@ function showSubjectFollowUpUI() {
     <input id="subjectFollowUpOutSourceId" value="" readonly=""><br>
     <a target="_vsx" href="https://www.aavso.org/vsx/index.php?view=search.top">VSX</a><br>
     <a target="_asas-sn" href="https://asas-sn.osu.edu/variables">ASAS-SN</a><br>
-    <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
     <a target="_cerit" href="https://wasp.cerit-sc.cz/form">CERIT SuperWASP DR1 archive</a><br>
+    <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
     <a target="_nasa_superwasp" href="https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries">NASA exoplanet SuperWASP TS archive</a><br>
   </div>`);
 
@@ -137,7 +137,7 @@ function showSubjectFollowUpUI() {
         '&sort_by=distance&sort_order=asc&show_non_periodic=true&show_without_class=true&asassn_discov_only=false&';
 
       document.getElementById('subjectFollowUpOutSourceId').value = ids.source_id;
-      document.querySelector('a[target="_cerit"]').href = `https://wasp.cerit-sc.cz/komar/?object=${encodeURIComponent(ids.source_id)}`;
+      document.querySelector('a[target="_cerit"]').href = `https://wasp.cerit-sc.cz/klimes/?object=${encodeURIComponent(ids.source_id)}`;
     }; // ()'subjectFollowUpSubmitBtn').onclick = ...
 
     document.getElementById('subjectFollowUpOutCoord').onclick = (evt) => { evt.target.select(); };
@@ -353,9 +353,6 @@ function tweakForMobile() {
   `);
 }
 tweakForMobile();
-
-
-
 
 
 

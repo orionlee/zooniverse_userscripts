@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.10.1
+// @version     1.11.1
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -87,6 +87,15 @@ function parseFileNameAsIds(fileName) {
   }
 }
 
+/**
+ * Convert SuperWASP flux (in micro-Vega) to magnitude.
+ * @param {float} flux
+ * @see https://exoplanetarchive.ipac.caltech.edu/docs/SuperWASPProcessing.html
+ */
+function fluxToMagnitude(flux) {
+  return -2.5 * Math.log10(flux) + 15;
+}
+
 
 function showSubjectFollowUpUI() {
   if (!getSubjectFileName()) {
@@ -113,7 +122,36 @@ function showSubjectFollowUpUI() {
     <a target="_cerit" href="https://wasp.cerit-sc.cz/form">CERIT SuperWASP DR1 archive</a><br>
     <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
     <a target="_nasa_superwasp" href="https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries">NASA exoplanet SuperWASP TS archive</a><br>
-  </div>`);
+    <details>
+      <summary style="padding-top: 0.5em;">Flux to Magnitude</summary>
+      Flux: <input id="subjectFollowUpInFlux" style="width: 10ch;"type="number">
+      <button id="subjectFollowUpFluxToMagCtl" style="padding-left: 1.5ch;padding-right: 1.5ch;">Go</button>
+      Mag.: <input id="subjectFollowUpOutMag" style="width: 10ch;" value="" tabindex="-1" readonly>
+      <br>
+      Flux: <input id="subjectFollowUpInFlux2" style="width: 10ch;"type="number">
+      <button id="subjectFollowUpFluxToMagCtl2" style="padding-left: 1.5ch;padding-right: 1.5ch;">Go</button>
+      Mag.: <input id="subjectFollowUpOutMag2" style="width: 10ch;" value="" tabindex="-1" readonly>
+      <div title="mapping of selected flux to magnitude">
+        2-> 14.25; 5-> 13.25 ; 10-> 12.5 ; 20-> 11.75<br>
+        40-> 11 ; 80-> 10.25 ; 160-> 9.49
+      </div>
+    </details>
+  </div>`); // various padding in html to make the controls easier to be tapped on mobile devices
+
+
+    const doFluxToMagnitudeWithUI = (inElId, outElId) => {
+      const flux = parseFloat(document.getElementById(inElId).value);
+      const mag = fluxToMagnitude(flux);
+      document.getElementById(outElId).value = mag.toFixed(2);
+    };
+
+    document.getElementById('subjectFollowUpFluxToMagCtl').onclick = () => {
+      doFluxToMagnitudeWithUI('subjectFollowUpInFlux', 'subjectFollowUpOutMag');
+    };
+
+    document.getElementById('subjectFollowUpFluxToMagCtl2').onclick = () => {
+      doFluxToMagnitudeWithUI('subjectFollowUpInFlux2', 'subjectFollowUpOutMag2');
+    };
 
     document.getElementById('subjectFollowUpCloseCtl').onclick = () => {
       document.getElementById('subjectFollowUpCtr').style.display = 'none';
@@ -164,6 +202,10 @@ function showSubjectFollowUpUI() {
   document.getElementById('subjectFollowUpOutCoordInDeg').value = '';
   document.getElementById('subjectFollowUpOutSourceId').value = '';
   document.getElementById('subjectFollowUpInFileName').value = getSubjectFileName();
+  for (let elId of ['subjectFollowUpInFlux', 'subjectFollowUpOutMag', 'subjectFollowUpInFlux2', 'subjectFollowUpOutMag2']) {
+    document.getElementById(elId).value = '';
+  }
+
   document.getElementById('subjectFollowUpSubmitBtn').click();
 
   document.querySelector('a[target="_vsx"]').focus();

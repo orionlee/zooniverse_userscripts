@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.10.0
+// @version     1.10.1
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -41,7 +41,10 @@ function getSubjectFileName() {
     const fileName = elFileName ? elFileName.textContent : '';
     return fileName;
   } finally {
-    document.querySelector('.modal-dialog button[title="Close"]').click();
+    // if we press close right away without a timeout, it won't be closed in some cases
+    // (possibly too soon for the UI to react?)
+    setTimeout(() => document.querySelector('.modal-dialog button[title="Close"]').click(),
+      10);
   }
 }
 
@@ -86,10 +89,11 @@ function parseFileNameAsIds(fileName) {
 
 
 function showSubjectFollowUpUI() {
-  if (!location.pathname.startsWith('/projects/ajnorton/superwasp-variable-stars/talk/')) {
-    // In some other, non-talk pages. Not applicable.
+  if (!getSubjectFileName()) {
     return;
   }
+  // else the page has the subject's filename, e.g., classify or subject talk,
+  // so the UI would work, proceed.
 
   const ctr = document.getElementById('subjectFollowUpCtr');
   if (ctr) {

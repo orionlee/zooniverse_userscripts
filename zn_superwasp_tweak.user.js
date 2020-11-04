@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.11.2
+// @version     1.11.3
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -109,6 +109,17 @@ function showSubjectFollowUpUI() {
     ctr.style.display = 'block';
   } else {
     // else init the UI
+    GM_addStyle(`
+#subjectFollowUpCtr, #subjectFollowUpCtr * {
+  -moz-user-select: none;
+  user-select: none;
+}
+
+#subjectFollowUpCtr input {
+  -moz-user-select: initial;
+  user-select: initial;
+}
+`);
     document.body.insertAdjacentHTML('beforeend', `\
   <div id="subjectFollowUpCtr" style="position: fixed;top: 10px;right: 30px;border: 1px solid gray;background-color: rgba(225, 225, 225);z-index: 99999;padding: 0.5em 2ch;">
     <div accessKey="W" id="subjectFollowUpCloseCtl" style="float: right;margin-right: 6px; cursor: pointer; user-select: none;">[X]</div>

@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.11.4
+// @version     1.11.6
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -37,8 +37,10 @@ function getSubjectFileName() {
 
   btn.click();
   try {
-    const elFileName = document.querySelector('.modal-dialog .markdown');
-    const fileName = elFileName ? elFileName.textContent : '';
+    // the header filename can have different cases, depending on the specific subject
+    const trFilename = Array.from(document.querySelectorAll('.modal-dialog table tr'))
+                       .filter(tr => tr.querySelector('th').textContent.toLowerCase() === 'filename')[0];
+    const fileName = trFilename ? trFilename.querySelector('td').textContent : '';
     return fileName;
   } finally {
     // if we press close right away without a timeout, it won't be closed in some cases
@@ -134,7 +136,7 @@ function showSubjectFollowUpUI() {
     <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
     <a target="_nasa_superwasp" href="https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries">NASA exoplanet SuperWASP TS archive</a><br>
     <details>
-      <summary style="padding-top: 1.0em; margin-bottom: 0.5em;">Flux to Magnitude</summary>
+      <summary style="padding-top: 0.5em; margin-bottom: 0.5em;">Flux to Magnitude</summary>
       Flux: <input id="subjectFollowUpInFlux" style="width: 10ch;"type="number">
       <button id="subjectFollowUpFluxToMagCtl" style="padding-left: 1.5ch;padding-right: 1.5ch;">Go</button>
       Mag.: <input id="subjectFollowUpOutMag" style="width: 10ch;" value="" tabindex="-1" readonly>

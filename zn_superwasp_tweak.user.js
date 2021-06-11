@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.11.6
+// @version     1.11.7
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -136,7 +136,7 @@ function showSubjectFollowUpUI() {
     <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
     <a target="_nasa_superwasp" href="https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblSearch/nph-tblSearchInit?app=ExoTbls&config=superwasptimeseries">NASA exoplanet SuperWASP TS archive</a><br>
     <details>
-      <summary style="padding-top: 0.5em; margin-bottom: 0.5em;">Flux to Magnitude</summary>
+      <summary style="padding-top: 0.5em; margin-bottom: 0.5em;" accessKey="L">F<span style="text-decoration: underline;">l</span>ux to Magnitude</summary>
       Flux: <input id="subjectFollowUpInFlux" style="width: 10ch;"type="number">
       <button id="subjectFollowUpFluxToMagCtl" style="padding-left: 1.5ch;padding-right: 1.5ch;">Go</button>
       Mag.: <input id="subjectFollowUpOutMag" style="width: 10ch;" value="" tabindex="-1" readonly>

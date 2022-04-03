@@ -7,7 +7,7 @@
 //                e.g., from Classify to Talk after users pressing Talk & Done.
 // @grant       GM_setClipboard
 // @grant       GM_addStyle
-// @version     1.11.7
+// @version     1.12.0
 // @author      -
 // @description UI 1) to help to follow up on a subject, looking up its information on SIMBAD, VSX, etc; and
 //                 2) make Classify UI more friendly on mobile / tablets (reducing scrolls needed).
@@ -40,8 +40,20 @@ function getSubjectFileName() {
     // the header filename can have different cases, depending on the specific subject
     const trFilename = Array.from(document.querySelectorAll('.modal-dialog table tr'))
                        .filter(tr => tr.querySelector('th').textContent.toLowerCase() === 'filename')[0];
-    const fileName = trFilename ? trFilename.querySelector('td').textContent : '';
-    return fileName;
+    const fileName = trFilename ? trFilename.querySelector('td').textContent : null;
+    if (fileName) {
+      return fileName;
+    }
+
+    // new subjects no longer show filename, but contains links to VeSPA, which has SuperWASPId embedded
+    // use it instead
+    const trVeSPA = Array.from(document.querySelectorAll('.modal-dialog table tr'))
+                       .filter(tr => tr.querySelector('th').textContent.toLowerCase() === 'vespa')[0];
+    const [, waspId] = trVeSPA?.querySelector('td a')?.href?.match(/source[/]([^/]+)/) || [null, null];
+    if (waspId) {
+      return `${waspId}_Pn_fold.gif` // use the waspId to create a pseudo filename that the rest of the code expected.
+    }
+    return '';
   } finally {
     // if we press close right away without a timeout, it won't be closed in some cases
     // (possibly too soon for the UI to react?)
@@ -77,6 +89,7 @@ function parseFileNameAsIds(fileName) {
     const [ra_deg, dec_deg] = toCoordInDeg(ra1, ra2, ra3, dec1, dec2, dec3);
     return {
       'source_id': `${prefix} J${ra1}${ra2}${ra3}${dec1}${dec2}${dec3}`,
+      'source_id_nospace': `${prefix}J${ra1}${ra2}${ra3}${dec1}${dec2}${dec3}`,
       'coord': `${ra1}:${ra2}:${ra3} ${dec1}:${dec2}:${dec3}`,
       'coord_deg': `${ra_deg.toFixed(5)} ${dec_deg.toFixed(5)}`,
       'ra': `${ra1}:${ra2}:${ra3}`,
@@ -131,6 +144,7 @@ function showSubjectFollowUpUI() {
     <input id="subjectFollowUpOutCoord" value="" readonly="">&emsp;<input id="subjectFollowUpOutCoordInDeg" value="" readonly=""><br>
     <input id="subjectFollowUpOutSourceId" value="" readonly=""><br>
     <a target="_vsx" href="https://www.aavso.org/vsx/index.php?view=search.top">VSX</a><br>
+    <a target="_vespa" href="https://www.superwasp.org/vespa/">VESPA</a><br>
     <a target="_asas-sn" href="https://asas-sn.osu.edu/variables">ASAS-SN</a><br>
     <a target="_cerit" href="https://wasp.cerit-sc.cz/form">CERIT SuperWASP DR1 archive</a><br>
     <a target="_simbad" href="http://simbad.u-strasbg.fr/simbad/sim-fcoo">SIMBAD</a><br>
@@ -187,13 +201,14 @@ function showSubjectFollowUpUI() {
       if (!ids) {
         return;
       }
+      // console.debug('ids: ', ids);
       const coord = ids.coord;
       document.getElementById('subjectFollowUpOutCoord').value = coord;
       GM_setClipboard(coord);
       document.getElementById('subjectFollowUpOutCoordInDeg').value = ids.coord_deg;
 
       document.querySelector('a[target="_vsx"]').href = `https://www.aavso.org/vsx/index.php?view=search.top#coord=${encodeURIComponent(coord)}`;
-
+      document.querySelector('a[target="_vespa"]').href = `https://www.superwasp.org/vespa/source/${ids.source_id_nospace}/`;
       document.querySelector('a[target="_simbad"]').href = `http://simbad.u-strasbg.fr/simbad/sim-coo?Coord=${encodeURIComponent(coord)}` +
         '&CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=2&Radius.unit=arcmin&submit=submit+query&CoordList=';
 

@@ -5,7 +5,7 @@
 // @match       https://www.zooniverse.org/projects/gaia-zooniverse/gaia-vari*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.4
+// @version     1.4.1
 // @author      -
 // @description
 // @icon        https://panoptes-uploads.zooniverse.org/project_avatar/7a23bfaf-b1b6-4561-9156-1767264163fe.jpeg
@@ -142,28 +142,39 @@ function onDblClickToSpawnExternalURL(evt) {
     return;
   }
 
-  if (evt.ctrlKey && evt.shiftKey) { // Ctrl-Shift dbl click to copy the id and spawn external URL
-    clickInfoBtn();
+  const doCopyAndOpenInTab = (openInTab=true) => {
     const id = getMetaData(curCfg['headerName']);
-    const externalURL = curCfg['urlFunc'](id);
-    GM_openInTab(externalURL, true); // in background
+    if (!id) {
+      return;
+    }
     copyHeaderValueToClipboard(curCfg['headerName']);
+    if (openInTab) {
+      const externalURL = curCfg['urlFunc'](id);
+      GM_openInTab(externalURL, true); // in background
+    }
+  };
+
+  // Ctrl-Shift dbl click to copy the id and spawn external URL
+  if (evt.ctrlKey && evt.shiftKey) {
+    clickInfoBtn();
+    doCopyAndOpenInTab();
     hideMetadataPopIn();
+    return;
   }
 
   if (!(evt.target.tagName === 'TD' && evt.target.previousElementSibling?.textContent === curCfg['headerName'])) {
     return;
   }
 
-  // case on relevant header cell (usually some ID of the subject, e.g. TIC for TESS)
+  // cases dblclick on relevant header cell in metadata popin
+  // (usually some ID of the subject, e.g. TIC for TESS)
+
   if (!(evt.ctrlKey || evt.shiftKey || evt.altKey)) {
-    copyHeaderValueToClipboard(curCfg['headerName']);
+    doCopyAndOpenInTab(openInTab=false);
     return;
   }
-  // case also with Ctrl / shift / AltKey
-  const id = getMetaData(curCfg['headerName']);
-  const externalURL = curCfg['urlFunc'](id);
-  GM_openInTab(externalURL, true); // in background
-  copyHeaderValueToClipboard(curCfg['headerName']);
+
+  // sub case also dblclick with Ctrl / shift / AltKey
+  doCopyAndOpenInTab();
 }
 document.addEventListener('dblclick', onDblClickToSpawnExternalURL);

@@ -5,10 +5,10 @@
 // @match       https://www.zooniverse.org/projects/gaia-zooniverse/gaia-vari*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.4.1
+// @version     1.4.2
 // @author      -
 // @description
-// @icon        https://panoptes-uploads.zooniverse.org/project_avatar/7a23bfaf-b1b6-4561-9156-1767264163fe.jpeg
+// @icon        https://www.zooniverse.org/favicon.ico
 // ==/UserScript==
 
 

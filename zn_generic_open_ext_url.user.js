@@ -5,7 +5,7 @@
 // @match       https://www.zooniverse.org/projects/gaia-zooniverse/gaia-vari*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.4.2
+// @version     1.5.0
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico
@@ -135,6 +135,16 @@ function copyHeaderValueToClipboard(headerName, notifyUser=true) {
 }
 
 
+// scroll classify page, to reduce users' need to scroll
+// (e.g., questions with long list of options)
+function scrollClassifyUI() {
+  if (location.pathname.search("/classify") < 0) {
+    return;
+  }
+  document.querySelector('.classify-page')?.scrollIntoView();
+}
+
+
 function onDblClickToSpawnExternalURL(evt) {
   const curCfg = getCurrentConfig();
   if (!curCfg) {
@@ -159,6 +169,8 @@ function onDblClickToSpawnExternalURL(evt) {
     clickInfoBtn();
     doCopyAndOpenInTab();
     hideMetadataPopIn();
+    // Ctrl-shift dblclick specific for Classification case
+    scrollClassifyUI();
     return;
   }
 

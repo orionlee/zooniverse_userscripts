@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name        Zooniverse Generic Subject External Information
-// @namespace   astro.tess
+// @namespace   zooniverse
 // @match       https://www.zooniverse.org/projects/vbkostov/eclipsing-binary-patrol*
 // @match       https://www.zooniverse.org/projects/gaia-zooniverse/gaia-vari*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.5.0
+// @version     1.5.1
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico

@@ -3,9 +3,15 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/projects/vbkostov/eclipsing-binary-patrol*
 // @match       https://www.zooniverse.org/projects/gaia-zooniverse/gaia-vari*
+//
+//              Not the primary URLs, but talk pages could be linked from these URLs
+//                 vvv
+// @match       https://www.zooniverse.org/users/*
+// @match       https://www.zooniverse.org/*/users/*
+// @match       https://www.zooniverse.org/notifications*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.5.1
+// @version     1.5.2
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico

@@ -11,7 +11,7 @@
 // @match       https://www.zooniverse.org/notifications*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.5.2
+// @version     1.6.0
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico
@@ -111,7 +111,7 @@ ${msg}
 const projectConfigs = {
   "/projects/vbkostov/eclipsing-binary-patrol": {
     'headerName': 'TIC_ID',
-    'urlFunc': (tic) => `https://exofop.ipac.caltech.edu/tess/target.php?id=${tic}#open=_gaia-dr3-var|_gaia-dr3|_tce|_gaia-dr3-xmatch-var|_tess-eb|_asas-sn|simbad|_vsx`,
+    'urlFunc': (tic) => `https://exofop.ipac.caltech.edu/tess/target.php?id=${tic}#open=_gaia-dr3-var|_gaia-dr3|_tce|_gaia-dr3-xmatch-var|_tess-eb-cats|_tess-eb|_asas-sn|simbad|_vsx`,
   },
 
   "/projects/gaia-zooniverse/gaia-vari" : {

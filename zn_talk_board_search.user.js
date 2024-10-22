@@ -3,7 +3,7 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/*
 // @grant       none
-// @version     1.1.0
+// @version     1.2.0
 // @author      -
 // @description Search comments of the current talk board.
 //              Can be used as an approximation of searching for recently tagged subjects on Notes.
@@ -82,6 +82,12 @@ function runOnceWhenReady(func, timeout=5000) {
 
 function formatCommentAsExcerpt(text) {
   // format the markdown-based comment as excerpt to be used within in <a> tag below
+
+  // remove img ![alt](url)
+  text = text.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '');
+
+  // remove link [title](url)
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1');
 
   const maxLength = 78;
   if (text.length <= maxLength) {
@@ -264,7 +270,7 @@ function initTalkBoardSearch() {
 <div id="talk-board-search-ctr"
      style="display: inline-block; font-size: 1rem; margin-left: 32px; margin-top: 8px; vertical-align: top;">
   <details>
-      <summary>Search recent comments</summary>
+      <summary>Search board</summary>
       Term: <input name="term" placeholder="Search term (regexp)">
       start page: <input name="startPage" value="1" size="4">
       end page: <input name="endPage" value="10" size="4">

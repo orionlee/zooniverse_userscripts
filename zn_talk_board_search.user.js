@@ -3,9 +3,10 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/*
 // @grant       none
-// @version     0.9.0
+// @version     1.0.0
 // @author      -
-// @description
+// @description Search comments of the current talk board.
+//              Can be used as an approximation of searching for recently tagged subjects on Notes.
 // @icon        https://www.zooniverse.org/favicon.ico
 // ==/UserScript==
 
@@ -91,12 +92,24 @@ function formatCommentAsExcerpt(text) {
 }
 
 
-async function searchBoardComments(boardId, queryRe, startPage, endPage) {
+async function searchBoardComments(boardId, queryRe, startPage, endPage, pageSize=100) {
+
+  // convert startPage / endPage based on page_size of 10 (ZN default) to a custom pageSize of 100,
+  // to reduce num. of AJAX calls
+  // The larger page size could make the result have more entries than the specified start / end page,
+  // but should be acceptable
+  if (pageSize > 100) {
+    pageSize = 100;  // ZN's max
+  }
+  pageSizeRatio = pageSize / 10;  // the ratio to the default  ZN page size
+  startPage = Math.ceil(startPage / pageSizeRatio);
+  endPage = Math.ceil(endPage / pageSizeRatio);
+  // console.debug(`searchBoardComments() adjusted pages: [${startPage}, ${endPage}] , pageSize=${pageSize}`);
 
   // Note: ZN has a cap of max page_size=100, so to cover a larger range, we need to make multiple calls
   async function fetchPageAsJson(page) {
     const resp = await fetch(
-      `https://talk.zooniverse.org/discussions?http_cache=true&board_id=${boardId}&page_size=10&page=${page}`,
+      `https://talk.zooniverse.org/discussions?http_cache=true&board_id=${boardId}&page_size=${pageSize}&page=${page}`,
       {
         headers: {
           'Accept': 'application/vnd.api+json; version=1',
@@ -163,11 +176,14 @@ async function doSearchAndShowResult() {
   const endPage = searchFormCtr.querySelector('input[name="endPage"]').value;
 
   const outCtr = document.querySelector('.talk-list-content section');
-  outCtr.innerHTML = "Searching...";
+  outCtr.innerHTML = `
+<span class="loading-indicator" style="visibility: visible;"><span class="loading-indicator-icon"></span> </span>
+Searching...
+`;
 
   // do the search
   const resp = await searchBoardComments(boardId, queryRe, startPage, endPage);
-  console.debug(resp);
+  // console.debug(resp);
 
   // render the result
   // - body is in markdown, just render an excerpt

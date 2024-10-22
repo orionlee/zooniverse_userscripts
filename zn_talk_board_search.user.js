@@ -3,7 +3,7 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/*
 // @grant       none
-// @version     1.0.0
+// @version     1.1.0
 // @author      -
 // @description Search comments of the current talk board.
 //              Can be used as an approximation of searching for recently tagged subjects on Notes.
@@ -137,8 +137,10 @@ async function searchBoardComments(boardId, queryRe, startPage, endPage, pageSiz
 
   function searchBoardCommentsResponse(resp) {
     // ignore \n\r during search to support search term spanning across multiple lines
+    // also search discussion title , as it's shown to users, and they might expect
+    // it's searchable
     return resp.discussions
-      .filter((d) => queryRe.test(d.latest_comment.body.replace(/[\n\r]/g, ' ')))
+      .filter((d) => queryRe.test(d.title + " " + d.latest_comment.body.replace(/[\n\r]/g, ' ')))
       .map(doMap);
   }
 
@@ -171,7 +173,8 @@ async function doSearchAndShowResult() {
   // Gather parameters from the form
   const searchFormCtr = document.querySelector('#talk-board-search-ctr')
   const boardId = searchFormCtr.querySelector('input[name="boardId"]').value;
-  const queryRe = new RegExp(searchFormCtr.querySelector('input[name="term"]').value);
+  // case insensitive search
+  const queryRe = new RegExp(searchFormCtr.querySelector('input[name="term"]').value, "i");
   const startPage = searchFormCtr.querySelector('input[name="startPage"]').value;
   const endPage = searchFormCtr.querySelector('input[name="endPage"]').value;
 
@@ -227,7 +230,7 @@ Searching...
 `).join('\n');
 
   outCtr.innerHTML = `
-<h2>${resp?.length} Comments with ${queryRe}</h2>
+<h4>${resp?.length} Comments with ${queryRe}</h4>
 ${resBody}
 `;
 } // function doSearchAndShowResult()

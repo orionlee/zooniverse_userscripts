@@ -3,7 +3,7 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/*
 // @grant       none
-// @version     1.2.0
+// @version     1.2.1
 // @author      -
 // @description Search comments of the current talk board.
 //              Can be used as an approximation of searching for recently tagged subjects on Notes.
@@ -263,6 +263,11 @@ function initTalkBoardSearch() {
     //   using '.talk-discussion-preview' appears to be a reliable indicator.
     if (!document.querySelector('.talk-discussion-preview')) {
       return false;  // The needed DOM has not been rendered yet.
+    }
+    if (document.getElementById('talk-board-search-ctr') != null) {
+      // it has been initialized, so no-op
+      //   (typically it happens when users paginates through a board)
+      return false;
     }
 
     const anchorEl = document.querySelector('h1.talk-page-header');

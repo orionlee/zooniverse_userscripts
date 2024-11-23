@@ -11,7 +11,7 @@
 // @match       https://www.zooniverse.org/notifications*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.6.0
+// @version     1.7.0
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico
@@ -170,12 +170,11 @@ function onDblClickToSpawnExternalURL(evt) {
     }
   };
 
-  // Ctrl-Shift dbl click to copy the id and spawn external URL
-  if (evt.ctrlKey && evt.shiftKey) {
+  // Ctrl-Shift or Alt-Shift dbl click to copy the id and spawn external URL
+  if ( (evt.ctrlKey && evt.shiftKey) || (evt.altKey && evt.shiftKey) ) {
     clickInfoBtn();
     doCopyAndOpenInTab();
     hideMetadataPopIn();
-    // Ctrl-shift dblclick specific for Classification case
     scrollClassifyUI();
     return;
   }

@@ -11,7 +11,7 @@
 // @match       https://www.zooniverse.org/notifications*
 // @grant       GM_openInTab
 // @grant       GM_setClipboard
-// @version     1.7.0
+// @version     1.7.1
 // @author      -
 // @description
 // @icon        https://www.zooniverse.org/favicon.ico
@@ -37,7 +37,6 @@ function hideMetadataPopIn() {
 
 const keyMap = {
   "KeyI":    clickInfoBtn,
-  "Numpad1": clickInfoBtn,
   "!altKey": {"KeyI": clickInfoBtn},
   "!any-modifier": {},
 }

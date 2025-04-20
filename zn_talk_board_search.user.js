@@ -3,7 +3,7 @@
 // @namespace   zooniverse
 // @match       https://www.zooniverse.org/*
 // @grant       none
-// @version     1.2.1
+// @version     1.2.2
 // @author      -
 // @description Search comments of the current talk board.
 //              Can be used as an approximation of searching for recently tagged subjects on Notes.
@@ -119,7 +119,7 @@ async function searchBoardComments(boardId, queryRe, startPage, endPage, pageSiz
       {
         headers: {
           'Accept': 'application/vnd.api+json; version=1',
-          'Content-Type': 'application-json',
+          'Content-Type': 'application/json',
         }
       }
     );
